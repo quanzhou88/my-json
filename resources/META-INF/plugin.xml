@@ -4,7 +4,7 @@
   <version>1.0</version>
   <vendor email="1334409562@.qq.com" url="http://www.baidu.com">yr</vendor>
 
-  <description>这是一个简单的JSON插件，可将json字符串进行压缩和格式化</description>
+  <description>This is a simple JSON plugin that can compress and format JSON strings</description>
 
   <change-notes>
     版本1
