@@ -1,0 +1,34 @@
+<idea-plugin>
+  <id>com.qz.json.util</id>
+  <name>qz-json</name>
+  <version>1.0</version>
+  <vendor email="1334409562@.qq.com" url="http://www.baidu.com">yr</vendor>
+
+  <description>这是一个简单的JSON插件，可将json字符串进行压缩和格式化</description>
+
+  <change-notes>
+    版本1
+  </change-notes>
+
+  <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>133
+
+<!--
+  <actions>
+    &lt;!&ndash; Add your actions here &ndash;&gt;
+  </actions>
+-->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="my-json" anchor="right" factoryClass="com.qz.json.MyToolWindowFactory" />
+  </extensions>
+
+</idea-plugin>
