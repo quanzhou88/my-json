@@ -4,10 +4,7 @@ import com.google.gson.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.lang.model.element.Modifier;
@@ -25,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -191,18 +189,33 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         File file = new File(savePath);
         String fileName = file.getName();
         int dotIndex = fileName.lastIndexOf(".");
+        String packageStr = null;
+        if (dotIndex == -1) {
+            JOptionPane.showMessageDialog(null, "请指定文件类型");
+            return;
+        }
         if (dotIndex != -1 && dotIndex < fileName.length() - 1) {
+
             fileName = fileName.substring(0, dotIndex);
+            int packageIndex = fileName.lastIndexOf(".");
+            if (packageIndex == -1) {
+                JOptionPane.showMessageDialog(null, "请指定文件全路径");
+                return;
+            }
+            packageStr = fileName.substring(0, packageIndex);
+            fileName = fileName.substring(packageIndex + 1, dotIndex);
+
         }
         String path = file.getParent();
 
+
         JsonElement jsonElement = JsonParser.parseString(input);
-        processJsonElement(jsonElement, path, fileName, "");
+        processJsonElement(jsonElement, path, fileName, "", packageStr);
 
     }
 
 
-    private void processJsonElement(JsonElement jsonElement, String path, String fileName, String parentFieldName) {
+    private void processJsonElement(JsonElement jsonElement, String path, String fileName, String parentFieldName, String packageStr) {
         JsonObject jsonObject = null;
         if (jsonElement.isJsonObject()) {
             jsonObject = jsonElement.getAsJsonObject();
@@ -228,8 +241,12 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     String fieldType = getFieldType(fieldValue);
                     if ("Object".equals(fieldType) || "Array".equals(fieldType)) {
                         String fullFieldName = parentFieldName.isEmpty() ? fieldName : parentFieldName + "." + fieldName;
-                        processJsonElement(fieldValue, path, replaceFirstCharWithUpperCase(fieldName), fullFieldName);
-                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(ClassName.get(("Array".equals(fieldType) ? List.class : Object.class)), fieldName, Modifier.PRIVATE);
+                        processJsonElement(fieldValue, path, replaceFirstCharWithUpperCase(fieldName), fullFieldName, packageStr);
+                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(("Array".equals(fieldType)
+                                ? ParameterizedTypeName.get(ClassName.get(List.class), ClassName.get(packageStr, replaceFirstCharWithUpperCase(fieldName)))
+                                : ClassName.get(packageStr, replaceFirstCharWithUpperCase(fieldName))),
+                                fieldName,
+                                Modifier.PRIVATE);
                         typeBuilder.addField(fieldBuilder.build());
                     } else {
                         FieldSpec.Builder fieldBuilder = FieldSpec.builder(getPropertyType(fieldType), fieldName, Modifier.PRIVATE);
@@ -237,7 +254,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     }
 
                 }
-                JavaFile.builder("", typeBuilder.build())
+                JavaFile.builder(packageStr, typeBuilder.build())
                         .indent("    ")
                         .build()
                         .writeTo(sw);
@@ -252,6 +269,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     Files.createFile(of);
                 }
                 Files.writeString(of, sw.toString(), StandardCharsets.UTF_8);
+                JOptionPane.showMessageDialog(null, "success");
             } catch (IOException e) {
                 e.printStackTrace();
             }

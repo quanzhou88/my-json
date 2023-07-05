@@ -1,13 +1,13 @@
 <idea-plugin>
   <id>com.qz.json.util</id>
   <name>qz-json</name>
-  <version>1.3.2</version>
+  <version>1.3.3</version>
   <vendor email="1334409562@.qq.com" url="">yr</vendor>
 
   <description>This is a simple JSON plugin that can help you format, indent, and convert JSON into Java classes based on its structure</description>
 
   <change-notes>
-    版本1.3.2
+    版本1.3.3,Optimizing Object Conversion for Complex Type JSON
   </change-notes>
 
 
