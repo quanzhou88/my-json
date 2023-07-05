@@ -228,12 +228,11 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     String fieldType = getFieldType(fieldValue);
                     if ("Object".equals(fieldType) || "Array".equals(fieldType)) {
                         String fullFieldName = parentFieldName.isEmpty() ? fieldName : parentFieldName + "." + fieldName;
-                        processJsonElement(fieldValue, path, fieldName, fullFieldName);
-                        String s = replaceFirstCharWithUpperCase(fieldName);
-                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(ClassName.get(("Array".equals(fieldType) ? List.class : Object.class)), s, Modifier.PRIVATE);
+                        processJsonElement(fieldValue, path, replaceFirstCharWithUpperCase(fieldName), fullFieldName);
+                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(ClassName.get(("Array".equals(fieldType) ? List.class : Object.class)), fieldName, Modifier.PRIVATE);
                         typeBuilder.addField(fieldBuilder.build());
                     } else {
-                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(getPropertyType(fieldType), replaceFirstCharWithUpperCase(fieldName), Modifier.PRIVATE);
+                        FieldSpec.Builder fieldBuilder = FieldSpec.builder(getPropertyType(fieldType), fieldName, Modifier.PRIVATE);
                         typeBuilder.addField(fieldBuilder.build());
                     }
 
