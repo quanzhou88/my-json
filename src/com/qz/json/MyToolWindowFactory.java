@@ -188,7 +188,10 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     private void saveJson(String input, String savePath) {
         File file = new File(savePath);
         String fileName = file.getName();
-        if (!fileName.endsWith("java")){JOptionPane.showMessageDialog(null, "文件类型错误");}
+        if (!fileName.endsWith("java")){
+            JOptionPane.showMessageDialog(null, "文件类型错误");
+            return;
+        }
         int dotIndex = fileName.lastIndexOf(".");
         String packageStr = null;
         if (dotIndex == -1) {
