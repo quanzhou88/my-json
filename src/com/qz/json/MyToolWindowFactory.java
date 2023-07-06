@@ -188,6 +188,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     private void saveJson(String input, String savePath) {
         File file = new File(savePath);
         String fileName = file.getName();
+        if (!fileName.endsWith("java")){JOptionPane.showMessageDialog(null, "文件类型错误");}
         int dotIndex = fileName.lastIndexOf(".");
         String packageStr = null;
         if (dotIndex == -1) {
@@ -211,6 +212,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         JsonElement jsonElement = JsonParser.parseString(input);
         processJsonElement(jsonElement, path, fileName, "", packageStr);
+        JOptionPane.showMessageDialog(null, "success");
 
     }
 
@@ -232,6 +234,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
             StringWriter sw = new StringWriter();
             TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(fileName)
                     .addModifiers(Modifier.PUBLIC)
+                    .addAnnotation(ClassName.get("lombok", "Data"))
                     .addSuperinterface(Serializable.class);
 
             try {
@@ -269,7 +272,6 @@ public class MyToolWindowFactory implements ToolWindowFactory {
                     Files.createFile(of);
                 }
                 Files.writeString(of, sw.toString(), StandardCharsets.UTF_8);
-                JOptionPane.showMessageDialog(null, "success");
             } catch (IOException e) {
                 e.printStackTrace();
             }
