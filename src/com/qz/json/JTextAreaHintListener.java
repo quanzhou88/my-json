@@ -28,7 +28,8 @@ public class JTextAreaHintListener implements FocusListener {
         String temp = inputTextArea.getText();
         if (temp.equals(hintText)) {
             inputTextArea.setText("");
-            inputTextArea.setForeground(Color.LIGHT_GRAY);
+            //inputTextArea.setForeground(Color.LIGHT_GRAY);
+            inputTextArea.setForeground(new Color(97, 146, 83));
         }
 
     }
