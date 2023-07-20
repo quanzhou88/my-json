@@ -2,7 +2,7 @@
   <id>com.qz.json.util</id>
   <name>qz-json</name>
   <version>1.3.5</version>
-  <vendor email="1334409562@.qq.com" url="">yr</vendor>
+  <vendor email="1334409562@qq.com" url="">yr</vendor>
 
   <description>This is a simple JSON plugin that can help you format, indent, and convert JSON into Java classes based on its structure</description>
 
